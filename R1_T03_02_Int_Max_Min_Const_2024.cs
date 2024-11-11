@@ -4,6 +4,7 @@
 // https://petlja.org/sr-Latn-RS/kurs/14606/7/1326
 // https://petlja.org/sr-Latn-RS/biblioteka/r/Zbirka/02%20Tipovi_detaljniji_pregled/02%20celobrojni_tip/02%20Baratanje_bitovima
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings#BFormatString
+// https://github.com/draganilicnis/R1_T03_02_Int_Max_Min_Const_2024/blob/main/R1_T03_02_Int_Max_Min_Const_2024.cs
 
 using System;
 // using System.Numerics;
