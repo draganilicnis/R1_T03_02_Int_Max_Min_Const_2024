@@ -1,104 +1,93 @@
-// https://petlja.org/sr-Cyrl-RS/kurs/14606/5/1318
-// https://petlja.org/sr-Latn-RS/kurs/14606/4/1314
-// https://petlja.org/sr-Cyrl-RS/kurs/14606/35/1394
-// https://petlja.org/sr-Latn-RS/kurs/14606/7/1326
-// https://petlja.org/sr-Latn-RS/biblioteka/r/Zbirka/02%20Tipovi_detaljniji_pregled/02%20celobrojni_tip/02%20Baratanje_bitovima
+// https://petlja.org/sr-Latn-RS/kurs/14606/33/2763
+// https://petlja.org/sr-Cyrl-RS/kurs/14606/6/1322
+// https://petlja.org/biblioteka/r/problemi/Zbirka/histogram
+// https://petlja.org/biblioteka/r/problemi/Zbirka-stara/histogram
+// https://arena.petlja.org/competition/r1-07-nizovi-05-preslikavanja#tab_132994
+// https://arena.petlja.org/competition/r1-07-nizovi-04-vektori-polinomi#tab_132710
+// https://arena.petlja.org/competition/skola-od-kuce-nizovi1-zadaci#tab_97594
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings#BFormatString
-// https://github.com/draganilicnis/R1_T03_02_Int_Max_Min_Const_2024/blob/main/R1_T03_02_Int_Max_Min_Const_2024.cs
+// https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-numeric-format-strings
+// https://github.com/draganilicnis/R1_T07_02_Niz_Z020_Histogram/blob/main/R1_T07_02_Niz_Z020_Histogram.cs
+// 1 WA
 
 using System;
-// using System.Numerics;
-class R1_T03_02_Int_Max_Min_Const_2024
+using System.Globalization;
+
+class R1_T07_02_Niz_Z020_Histogram_01_WA_Ver_000
 {
     static void Main()
     {
-        Int_00_Const_Ispis();
-        Int_01_Max();
-        Int_02_HEX_BIN_Raad();
-        Real_03_Const();
-    }
-    static void Int_00_Const_Ispis()
-    {
-        int a = 65;
-        int b = 0b1000001;      // 0h41 = 65
-        int h = 0x41;           // 65
-        Console.WriteLine(a);
-        Console.WriteLine(b);
-        Console.WriteLine(h);
-        Console.WriteLine((char)h);
-        Console.WriteLine(h + 1);
-        Console.WriteLine((char)h + 1);
-        Console.WriteLine((char)(h + 1));
-        Console.WriteLine(a.ToString("X4"));
-        Console.WriteLine(a.ToString("x4"));
-        // Console.WriteLine(a.ToString("b4")); .NET 8.0    
-    }
-    static void Int_01_Max()
-    {
-        Console.WriteLine(" 1. sbyte:      " + sbyte.MaxValue);
-        Console.WriteLine(" 2. byte:       " + byte.MaxValue);
-        Console.WriteLine(" 3. short:      " + short.MaxValue);
-        Console.WriteLine(" 4. ushort:     " + ushort.MaxValue);
-        Console.WriteLine(" 5. int:        " + int.MaxValue);
-        Console.WriteLine(" 6. uint:       " + uint.MaxValue);
-        Console.WriteLine(" 7. long:       " + long.MaxValue);
-        Console.WriteLine(" 8. ulong:      " + ulong.MaxValue);
-        // Console.WriteLine("9. BigInteger: " + BigInteger.MaxValue);      // Ne kompajlira
-        Console.WriteLine("10. float:      " + float.MaxValue);
-        Console.WriteLine("11. double:     " + double.MaxValue);
-        Console.WriteLine("12. decimal:    " + decimal.MaxValue);
-        Console.WriteLine("13. Half:       " + Half.MaxValue);
+        Histogram();
+        // Real_double_Zaokruzivanje();
     }
 
-    static void Int_02_HEX_BIN_Raad()
+    static void Histogram()
     {
-        // https://petlja.org/sr-Latn-RS/biblioteka/r/Zbirka/binarni_i_heksadekadni_zapis_broja
-        // Procitaj heksadekadni, ispisi dekadni
-        string sh = "1F";
-        ulong h = Convert.ToUInt64(sh, 16); // ulong h = Convert.ToUInt64(Console.ReadLine(), 16);
-        Console.WriteLine(h);
+        string[] s = Console.ReadLine().Split();            // Ucitavamo granice intervala
+        double a = double.Parse(s[0], CultureInfo.InvariantCulture);
+        double b = double.Parse(s[1], CultureInfo.InvariantCulture);
 
-        // Procitaj binarni, ispisi dekadni
-        string sb = "01000001";
-        ulong b = Convert.ToUInt64(sb, 2); // ulong b = Convert.ToUInt64(Console.ReadLine(), 2);
-        Console.WriteLine(b);
+        int n = int.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);              // Ucitavamo broj podeoka
+        double dx = (b - a) / n;                            // Izracunavamo sirinu jednog podeoka
+        int[] histogram = new int[n];                       // Histogram cuva broj tacaka u svakom podeoku
+
+        int k = int.Parse(Console.ReadLine());              // Ucitavamo ukupan broj tacaka
+        for (int i = 0; i < k; i++)
+        {
+            double x = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);    // Ucitavamo sledecu tacku
+            int podeok = (int)((x - a) / dx);               // Odredjujemo podeok kojem ona pripada
+            histogram[podeok]++;                            // Uvecavamo broj tacaka u tom podeoku histograma
+        }
+
+        // Ispisujemo histogram
+        double t = a;
+        for (int i = 0; i < n; i++)
+        {
+            // Console.Write("[" + t.ToString("F3") + ", " + (t + dx).ToString("F3") + "): ");          // Ispisujemo granice tekuceg podeoka (zaokruzene na tri decimale)
+            // Zbog ispisa, odnosno zaokruzivanja na 3 decimale
+            // double l = Math.Floor(t * 10000) / 10000;
+            // double d = Math.Floor((t + dx) * 10000) / 10000;
+            double l = t;
+            double d = t + dx;
+            Console.Write("[" + l.ToString("F3", CultureInfo.InvariantCulture) + ", " + d.ToString("F3", CultureInfo.InvariantCulture) + "): ");                    // Ispisujemo granice tekuceg podeoka (zaokruzene na tri decimale)
+
+            Console.Write(histogram[i] + "\t");                                                         // Ispisujemo broj tacaka u tekucem podeoku
+            // Ispisujemo zvezdice
+            double procenat = (double)histogram[i] / (double)k;
+            int brojZvezdica = (int)Math.Round(100 * procenat);
+            for (int z = 0; z < brojZvezdica; z++) Console.Write("*");
+            Console.WriteLine();
+            t = t + dx;        // Prelazimo na naredni podeok
+        }
     }
-    static void Real_03_Const()
+    static void Real_double_Zaokruzivanje()
     {
-        // https://petlja.org/sr-Latn-RS/kurs/14606/4/1314
-        double x = 3;
-        x = 3;
-        x = 3.0;
-        x = +3;
-        x = +3.0;
-        x = 3e0;
-        x = 3.0e0;
-        x = +3e0;
-        x = +3.0e0;
-        x = 3E0;
-        x = 3.0E0;
-        x = +3E0;
-        x = +3.0E0;
-        x = 0.3e1;
-        x = .3e1;
-        x = +0.3e1;
-        x = +.3e1;
-        x = 0.03e2;
-        // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-numeric-format-strings#BFormatString
-        x = 3.49999999;
-        int b = (int)x;
-        Console.WriteLine(x);
-        Console.WriteLine(x.ToString("0.00"));
-        Console.WriteLine(x.ToString("F2"));
-        Console.WriteLine(x.ToString("E"));
-        Console.WriteLine(x.ToString("e4"));
-        Console.WriteLine(x.ToString("E8"));
-        Console.WriteLine(x.ToString("C3"));
-        Console.WriteLine(b.ToString("D"));
-        Console.WriteLine(x.ToString("F3"));
-        Console.WriteLine(x.ToString("G3"));
-        Console.WriteLine(x.ToString("N1"));
-        Console.WriteLine(x.ToString("P2"));
-        Console.WriteLine(b.ToString("X"));
+        Console.InputEncoding = System.Text.Encoding.Unicode;
+        Console.OutputEncoding = System.Text.Encoding.Unicode;       
+        // WA 1 Test primer 6
+        // double[] Test_Primer_6_OUT = new double[8 + 1];
+        double[] Test_Primer_6_OUT = { 8.230, 8.586, 8.942, 9.299, 9.655, 10.011, 10.367, 10.724, 11.080 };
+        double a =  8.23;       // double a = double.Parse(s[0]);
+        double b = 11.08;       // double b = double.Parse(s[1]);
+        int n = 8;              // int n = int.Parse(Console.ReadLine());
+        double dx = (b - a) / n;
+        Console.WriteLine(dx);
+        Console.WriteLine("   " + a.ToString("00.000"));
+        CultureInfo ci = new CultureInfo("en-us");
+        double t = a;
+        for (int i = 0; i < n; i++)
+        {
+            t = t + dx;
+            // Console.WriteLine(t);
+            Console.Write(i + ". " + Test_Primer_6_OUT[i + 1].ToString("00.000") + ": ");
+            Console.Write(t.ToString("00.000") + " " + t.ToString("00.0000") + " " + t.ToString("00.00000") + " ");
+            Console.Write(t.ToString("F3", CultureInfo.InvariantCulture) + " ");
+            Console.Write(t.ToString("F3", ci) + " ");
+            Console.Write(t.ToString("N3") + " ");
+            double p = Math.Floor(t * 10000) / 10000;
+            Console.Write(p.ToString("00.000") + " ");
+            Console.Write(t);
+            Console.WriteLine();
+        }
     }
 }
